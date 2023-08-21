@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MultiunityServer
 {
-    internal class Class1
+    internal class Encoder
     {
     }
 }

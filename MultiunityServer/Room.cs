@@ -8,5 +8,6 @@ namespace MultiunityServer
 {
     internal class Room
     {
+
     }
 }

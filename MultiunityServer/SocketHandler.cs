@@ -44,10 +44,15 @@ namespace MultiunityServer
         {
             for (; ; )
             {
-                var handler = await newListener.AcceptAsync();
-                new Session(handler, sessions);
+                Socket handler = await newListener.AcceptAsync();
+                Session session = new Session(handler, this);
+                sessions.Add(session);
                 Console.WriteLine("Made session");
             }
+        }
+        public void Destroy(Session session)
+        {
+            sessions.Remove(session);
         }
     }
 }
