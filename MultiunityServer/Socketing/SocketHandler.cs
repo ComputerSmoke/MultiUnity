@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Collections.Specialized.BitVector32;
 
-namespace MultiunityServer
+namespace MultiunityServer.Socketing
 {
     internal class SocketHandler
     {

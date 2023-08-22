@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Net;
 using System.Diagnostics;
+using MultiunityServer.Sharding;
 
-namespace MultiunityServer
+namespace MultiunityServer.Socketing
 {
     internal class ServerSession : ISession
     {
@@ -16,52 +17,30 @@ namespace MultiunityServer
         Decoder decoder;
         Encoder encoder;
         SocketHandler socketHandler;
+        public Shard shard;
 
         public ServerSession(Socket socket, SocketHandler socketHandler)
         {
             this.socket = socket;
             this.socketHandler = socketHandler;
             creates = new Queue<Entity>();
+            this.shard = new();
         }
         public Socket GetSocket()
         {
             return socket;
         }
-        
-        private int NpcShip()
+        public void Join(int roomId)
         {
-            newNpcs.Enqueue(ReadObj());
-            return 0;
+            World.GetRoom(roomId).Join(this);
         }
-        private int MyShip()
+        public void Create(int prefab, Entity entity)
         {
-            ship = ReadObj();
-            Console.WriteLine("x: " + ship.pos.x + " y: " + ship.pos.y);
-            return 0;
+            entity.owner = this;
+            shard.Create(prefab, entity);
         }
-        private int Shot()
-        {
-            newProjectiles.Enqueue(ReadObj());
-            return 0;
-        }
-        private int Entered()
-        {
-            Area oArea = area;
-            Console.WriteLine("entering");
-            int areaNum = ReadInt();
-            Area tarea = areas.GetArea(areaNum);
-            area = tarea;
-            tarea.AddSession(this);
-            if (oArea != null) oArea.RemoveSession(this);
-            return 0;
-        }
-        private int Died()
-        {
-            killer = ReadInt();
-            return 0;
-        }
-        
-        
+
+
         public void Send(byte[] data)
         {
             try
