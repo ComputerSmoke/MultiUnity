@@ -11,15 +11,11 @@ namespace MultiunityServer.Sharding
     internal class Shard
     {
         HashSet<ServerSession> sessions;
-        Dictionary<int, Entity> entities;
-        Queue<int> tags;
-        int spawnedObjectCount;
-        public IdGenerator entityIdGenerator;
+        EntityDictionary entities;
         public Shard()
         {
             sessions = new HashSet<ServerSession>();
-            tags = new Queue<int>();
-            entityIdGenerator = new IdGenerator();
+            entities = new();
         }
         public void AddSession(ServerSession session)
         {
@@ -38,6 +34,7 @@ namespace MultiunityServer.Sharding
         }
         public void Create(int prefab, Entity entity)
         {
+            entities.Add(entity);
             byte[] entityEncoding = entity.Encoding();
             byte[] encoding = new byte[entityEncoding.Length+2];
             int idx = 0;
@@ -46,10 +43,28 @@ namespace MultiunityServer.Sharding
             {
                 encoding[i] = entityEncoding[i-idx];
             }
-            foreach(ServerSession session in sessions)
+            ForwardAll(entity.owner, encoding);
+        }
+        public void Update(Entity entity)
+        {
+            entities.Add(entity);
+            byte[] encoding = entity.Encoding();
+            ForwardAll(entity.owner, encoding);
+        }
+        public void Destroy(ServerSession owner, int clientId)
+        {
+            Entity entity = entities.Get(owner, clientId);
+            byte[] encoding = new byte[2];
+            Entity.AppendInt16(encoding, 0, entity.id);
+            entities.Destroy(entity);
+            ForwardAll(owner, encoding);
+        }
+        private void ForwardAll(ServerSession excluded, byte[] data)
+        {
+            foreach (ServerSession session in sessions)
             {
-                if (session == entity.owner) continue;
-                session.Send(encoding);
+                if (session == excluded) continue;
+                session.Send(data);
             }
         }
     }

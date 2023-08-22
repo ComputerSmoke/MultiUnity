@@ -39,7 +39,15 @@ namespace MultiunityServer.Socketing
             entity.owner = this;
             shard.Create(prefab, entity);
         }
-
+        public void Update(Entity entity)
+        {
+            entity.owner = this;
+            shard.Update(entity);
+        }
+        public void Destroy(int clientId)
+        {
+            shard.Destroy(this, clientId);
+        }
 
         public void Send(byte[] data)
         {
@@ -49,7 +57,7 @@ namespace MultiunityServer.Socketing
             }
             catch
             {
-                area.RemoveSession(this);
+                shard.RemoveSession(this);
                 socket.Close();
             }
         }
