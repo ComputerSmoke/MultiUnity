@@ -19,7 +19,6 @@ namespace MultiunityServer
             entities = new();
             parentIndex = new();
             entityIdGenerator = new();
-            idMapping = new();
         }
         private void AssignId(Entity entity)
         {
