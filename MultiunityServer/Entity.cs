@@ -19,7 +19,7 @@ namespace MultiunityServer
         public int id;
         public float timestamp;
         public int clientId;
-        public ServerSession owner;
+        public ServerSession? owner;
         public Entity(int clientId, float timestamp, Vec pos, Vec vel, Vec accel, float rot, int parent)
         {
             this.timestamp = timestamp;

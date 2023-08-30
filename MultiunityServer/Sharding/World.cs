@@ -6,18 +6,22 @@ using System.Threading.Tasks;
 
 namespace MultiunityServer.Sharding
 {
-    static internal class World
+    internal class World
     {
-        static Dictionary<int, Room> rooms = new Dictionary<int, Room>();
-        public static void AddRoom(Room room)
+        Dictionary<int, Room> rooms;
+        public World()
+        {
+            rooms = new Dictionary<int, Room>();
+        }
+        public void AddRoom(Room room)
         {
             rooms[room.id] = room;
         }
-        public static void RemoveRoom(Room room)
+        public void RemoveRoom(Room room)
         {
             rooms.Remove(room.id);
         }
-        public static Room GetRoom(int id)
+        public Room GetRoom(int id)
         {
             return rooms[id];
         }

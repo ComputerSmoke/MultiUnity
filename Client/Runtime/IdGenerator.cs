@@ -16,6 +16,7 @@ internal class IdGenerator<T> where T: notnull
             nextId = 1;
             idMapping = new();
             idMapRev = new();
+            ids = new();
         }
         public IdGenerator()
         {
@@ -23,6 +24,7 @@ internal class IdGenerator<T> where T: notnull
             this.maxId = 0xFFFF;
             idMapping = new();
             idMapRev = new();
+            ids = new();
         }
         public int Assign(T obj)
         {

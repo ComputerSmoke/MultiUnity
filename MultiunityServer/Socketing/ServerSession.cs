@@ -16,13 +16,15 @@ namespace MultiunityServer.Socketing
         public Queue<Entity> creates;
         Decoder decoder;
         public Shard shard;
+        private World world;
 
-        public ServerSession(Socket socket)
+        public ServerSession(Socket socket, World world)
         {
             this.socket = socket;
             creates = new Queue<Entity>();
             this.shard = new();
             this.decoder = new Decoder(this);
+            this.world = world;
         }
         public Socket GetSocket()
         {
@@ -30,7 +32,7 @@ namespace MultiunityServer.Socketing
         }
         public void Join(int roomId)
         {
-            World.GetRoom(roomId).Join(this);
+            world.GetRoom(roomId).Join(this);
         }
         public void Create(int prefab, Entity entity)
         {

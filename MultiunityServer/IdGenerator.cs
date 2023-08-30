@@ -20,6 +20,7 @@ namespace MultiunityServer
             nextId = 1;
             idMapping = new();
             idMapRev = new();
+            ids = new();
         }
         public IdGenerator()
         {
@@ -27,6 +28,7 @@ namespace MultiunityServer
             this.maxId = 0xFFFF;
             idMapping = new();
             idMapRev = new();
+            ids = new();
         }
         public int Assign(T obj)
         {

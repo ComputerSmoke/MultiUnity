@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Collections.Specialized.BitVector32;
+using MultiunityServer.Sharding;
 
 namespace MultiunityServer.Socketing
 {
@@ -13,13 +14,16 @@ namespace MultiunityServer.Socketing
     {
         Socket listener;
         HashSet<ServerSession> sessions;
-        public SocketHandler()
+        World world;
+        public SocketHandler(World world)
         {
+            this.world = world;
             listener = Init(11_000);
             sessions = new HashSet<ServerSession>();
         }
-        public SocketHandler(int port)
+        public SocketHandler(int port, World world)
         {
+            this.world = world;
             listener = Init(port);
             sessions = new HashSet<ServerSession>();
         }
@@ -45,7 +49,7 @@ namespace MultiunityServer.Socketing
             for (; ; )
             {
                 Socket handler = await newListener.AcceptAsync();
-                ServerSession session = new ServerSession(handler);
+                ServerSession session = new ServerSession(handler, world);
                 sessions.Add(session);
                 Console.WriteLine("Made session");
             }
