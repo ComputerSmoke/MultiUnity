@@ -15,16 +15,14 @@ namespace MultiunityServer.Socketing
         public Socket socket;
         public Queue<Entity> creates;
         Decoder decoder;
-        Encoder encoder;
-        SocketHandler socketHandler;
         public Shard shard;
 
-        public ServerSession(Socket socket, SocketHandler socketHandler)
+        public ServerSession(Socket socket)
         {
             this.socket = socket;
-            this.socketHandler = socketHandler;
             creates = new Queue<Entity>();
             this.shard = new();
+            this.decoder = new Decoder(this);
         }
         public Socket GetSocket()
         {
