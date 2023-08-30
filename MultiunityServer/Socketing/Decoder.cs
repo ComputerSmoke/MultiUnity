@@ -33,7 +33,7 @@ namespace MultiunityServer.Socketing
             inQueue = new Queue<byte>();
             inBuf = new byte[1000];
             codeFunctions = new Func<int>[] { Join, Create, Update, Destroy };
-            codeLengths = new int[] { 2, 34, 32, 2 };
+            codeLengths = new int[] { 2, 42, 40, 2 };
             Listen();
         }
         private int Join()
@@ -64,13 +64,14 @@ namespace MultiunityServer.Socketing
         private Entity ReadEntity()
         {
             int clientId = ReadInt16();
-            float timestamp = ReadFloat();
             Vec position = ReadVec();
             Vec velocity = ReadVec();
             Vec accel = ReadVec();
             float rotation = ReadFloat();
+            float rotVel = ReadFloat();
+            float rotAccel = ReadFloat();
             int parent = ReadInt16();
-            return new Entity(clientId, timestamp, position, velocity, accel, rotation, parent);
+            return new Entity(clientId, position, velocity, accel, rotation, rotVel, rotAccel, parent);
         }
         private float ReadFloat()
         {
@@ -79,7 +80,8 @@ namespace MultiunityServer.Socketing
         }
         private int ReadInt16()
         {
-            return BitConverter.ToInt32(ReadBytes(2));
+            byte[] bytes = ReadBytes(2);
+            return (((int)(bytes[0])) << 8) | ((int)(bytes[1]));
         }
         private Vec ReadVec()
         {
@@ -121,7 +123,7 @@ namespace MultiunityServer.Socketing
                     for (int i = 0; i < received; i++) inQueue.Enqueue(inBuf[i]);
                     ReadQueue();
                 }
-                catch
+                catch(Exception ex)
                 {
                     inQueue.Clear();
                     reading = null;

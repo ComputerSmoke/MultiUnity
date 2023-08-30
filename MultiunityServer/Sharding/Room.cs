@@ -24,6 +24,7 @@ namespace MultiunityServer.Sharding
             {
                 if (shard.Occupancy() >= shardSize) continue;
                 shard.AddSession(session);
+                return;
             }
             Shard newShard = new();
             newShard.AddSession(session);

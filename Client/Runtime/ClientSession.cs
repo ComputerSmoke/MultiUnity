@@ -41,5 +41,8 @@ public static class ClientSession
         byte[] buf = Encoder.Create(obj, prefab);
         SocketHandler.Send(buf);
     }
-
+    public static void Join(int roomId) {
+        byte[] encoding = Encoder.Join(roomId);
+        SocketHandler.Send(encoding);
+    }
 }

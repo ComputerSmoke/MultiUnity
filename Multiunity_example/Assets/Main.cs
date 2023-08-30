@@ -10,7 +10,9 @@ public class Main : MonoBehaviour
     {
         GameObject[] prefabs = new GameObject[] {baller};
         PrefabIdMap.SetPrefabs(prefabs);
-        ClientSession.Instantiate(baller);
+        ClientSession.Join(1);
+        System.Random rand = new();
+        ClientSession.Instantiate(baller, new Vector3(rand.Next(10), 0, 0), Quaternion.Euler(0, 0, 0));
     }
 
     // Update is called once per frame

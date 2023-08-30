@@ -26,6 +26,7 @@ namespace MultiunityServer.Socketing
             this.decoder = new Decoder(this);
             this.world = world;
         }
+        //TODO: keep backlog of created objects in rooms and send to new clients joining
         public Socket GetSocket()
         {
             return socket;

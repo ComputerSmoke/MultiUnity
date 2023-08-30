@@ -15,12 +15,14 @@ namespace MultiunityServer
         Vec vel;
         Vec accel;
         float rot;
+        float rotv;
+        float rota;
         public int parent;
         public int id;
         public float timestamp;
         public int clientId;
         public ServerSession? owner;
-        public Entity(int clientId, float timestamp, Vec pos, Vec vel, Vec accel, float rot, int parent)
+        public Entity(int clientId, Vec pos, Vec vel, Vec accel, float rot, float rotVel, float rotAccel, int parent)
         {
             this.timestamp = timestamp;
             this.pos = pos;
@@ -29,16 +31,20 @@ namespace MultiunityServer
             this.rot = rot;
             this.parent = parent;
             this.clientId = clientId;
+            rotv = rotVel;
+            rota = rotAccel;
         }
 
         public byte[] Encoding()
         {
-            byte[] data = new byte[32];
+            byte[] data = new byte[40];
             int i = 0;
             i = AppendVec(data, i, pos);
             i = AppendVec(data, i, vel);
             i = AppendVec(data, i, accel);
             i = AppendFloat(data, i, rot);
+            i = AppendFloat(data, i, rotv);
+            i = AppendFloat(data, i, rota);
             AppendInt16(data, i, parent);
             return data;
         }

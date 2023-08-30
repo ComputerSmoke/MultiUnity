@@ -22,6 +22,7 @@ internal class IdGenerator<T> where T: notnull
         {
             //Default: 2 byte max int
             this.maxId = 0xFFFF;
+            nextId = 1;
             idMapping = new();
             idMapRev = new();
             ids = new();

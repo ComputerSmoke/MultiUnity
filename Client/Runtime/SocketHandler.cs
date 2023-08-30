@@ -7,7 +7,7 @@ using System.Net.Sockets;
 
 public static class SocketHandler
 {
-    static Socket client;
+    public static Socket client;
     static bool connected;
     public static void Connect() {
         IPHostEntry ipHostInfo = Dns.GetHostEntry("localhost");
@@ -19,6 +19,7 @@ public static class SocketHandler
             ProtocolType.Tcp);
         client.Connect(ipEndPoint);
         connected = true;
+        Decoder.Listen();
     }
     
     public static void Send(byte[] data) {
