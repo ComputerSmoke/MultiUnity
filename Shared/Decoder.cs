@@ -6,14 +6,12 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using System.Threading.Tasks.Dataflow;
 
 namespace Multiunity.Shared
 {
-    using Vec = Tuple<float, float>;
     public class Decoder
     {
-        enum InCode
+        public enum InCode
         {
             JOIN_ROOM,
             CREATE,
@@ -26,14 +24,15 @@ namespace Multiunity.Shared
         ISession session;
         Func<int>[] codeFunctions;
         int[] codeLengths;
-
-        public Decoder(ISession session)
+        Socket socket;
+        public Decoder(Socket socket, ISession session)
         {
+            this.socket = socket;
             this.session = session;
             inQueue = new Queue<byte>();
             inBuf = new byte[1000];
             codeFunctions = new Func<int>[] { Join, Create, Update, Destroy };
-            codeLengths = new int[] { 2, 42, 40, 2 };
+            codeLengths = Encoder.CodeLengths();
             Listen();
         }
         private int Join()
@@ -64,9 +63,9 @@ namespace Multiunity.Shared
         private Entity ReadEntity()
         {
             int clientId = ReadInt16();
-            Vec position = ReadVec();
-            Vec velocity = ReadVec();
-            Vec accel = ReadVec();
+            (float, float) position = ReadVec();
+            (float, float) velocity = ReadVec();
+            (float, float) accel = ReadVec();
             float rotation = ReadFloat();
             float rotVel = ReadFloat();
             float rotAccel = ReadFloat();
@@ -83,11 +82,11 @@ namespace Multiunity.Shared
             byte[] bytes = ReadBytes(2);
             return (((int)(bytes[0])) << 8) | ((int)(bytes[1]));
         }
-        private Vec ReadVec()
+        private (float, float) ReadVec()
         {
             float x = ReadFloat();
             float y = ReadFloat();
-            return new Vec(x, y);
+            return (x, y);
         }
         private byte[] ReadBytes(int n)
         {
@@ -102,10 +101,10 @@ namespace Multiunity.Shared
             {
                 int readNum = inQueue.Dequeue();
                 if (readNum < 0 || readNum >= codeLengths.Length) return;
-                reading ??= (InCode)readNum;
+                if (reading == null) reading = (InCode)readNum;
             }
             Console.WriteLine("reading: " + reading);
-            if (inQueue.Count < codeLengths[(int)reading]) return;
+            if (inQueue.Count < codeLengths[(int)reading]-1) return;
             codeFunctions[(int)reading]();
             reading = null;
             ReadQueue();
@@ -117,7 +116,6 @@ namespace Multiunity.Shared
                 try
                 {
                     await Task.Delay(100);
-                    Socket socket = session.GetSocket();
                     if (socket.Available == 0) continue;
                     int received = socket.Receive(inBuf, SocketFlags.None);
                     for (int i = 0; i < received; i++) inQueue.Enqueue(inBuf[i]);

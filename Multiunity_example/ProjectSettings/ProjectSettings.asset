@@ -816,11 +816,11 @@ PlayerSettings:
   m_MobileRenderingPath: 1
   metroPackageName: Multiunity_example
   metroPackageVersion: 
-  metroCertificatePath: 
+  metroCertificatePath: Assets/WSATestCertificate.pfx
   metroCertificatePassword: 
-  metroCertificateSubject: 
-  metroCertificateIssuer: 
-  metroCertificateNotAfter: 0000000000000000
+  metroCertificateSubject: DefaultCompany
+  metroCertificateIssuer: DefaultCompany
+  metroCertificateNotAfter: 8091acc346fbda01
   metroApplicationDescription: Multiunity_example
   wsaImages: {}
   metroTileShortName: 

@@ -12,12 +12,12 @@ namespace Multiunity.Shared
         Dictionary<int, Dictionary<int, Entity>> parentIndex;
         public int Count { get { return entities.Count; } } 
         public bool IsReadOnly { get { return false; } }
-        IdGenerator<(ISession?, int)> entityIdGenerator;
+        IdGenerator<(ISession, int)> entityIdGenerator;
         public EntityDictionary()
         {
-            entities = new();
-            parentIndex = new();
-            entityIdGenerator = new();
+            entities = new Dictionary<int, Entity>();
+            parentIndex = new Dictionary<int, Dictionary<int, Entity>>();
+            entityIdGenerator = new IdGenerator<(ISession, int)>();
         }
         private void AssignId(Entity entity)
         {
@@ -28,7 +28,7 @@ namespace Multiunity.Shared
             AssignId(entity);
             Remove(entity);
             entities[entity.id] = entity;
-            if (!parentIndex.ContainsKey(entity.parent)) parentIndex[entity.parent] = new();
+            if (!parentIndex.ContainsKey(entity.parent)) parentIndex[entity.parent] = new Dictionary<int,Entity>();
             parentIndex[entity.parent][entity.id] = entity;
         }
         public bool Remove(Entity entity)
@@ -63,7 +63,7 @@ namespace Multiunity.Shared
         public Dictionary<int, Entity> Children(Entity parent)
         {
             AssignId(parent);
-            if (!parentIndex.ContainsKey(parent.id)) return new();
+            if (!parentIndex.ContainsKey(parent.id)) return new Dictionary<int, Entity>();
             return parentIndex[parent.id];
         }
         public void Clear()

@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <BaseOutputPath>bin\</BaseOutputPath>
   </PropertyGroup>
 
@@ -11,7 +10,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy &quot;.\bin\Debug\net6.0\ClientLib.dll&quot; &quot;..\Client\Runtime\ClientLib.dll&quot;&#xD;&#xA;copy &quot;.\bin\Debug\net6.0\Shared.dll&quot; &quot;..\Client\Runtime\Shared.dll&quot;" />
+    <Exec Command="copy &quot;.\bin\Debug\netstandard2.1\ClientLib.dll&quot; &quot;..\Client\Runtime\ClientLib.dll&quot;&#xD;&#xA;copy &quot;.\bin\Debug\netstandard2.1\Shared.dll&quot; &quot;..\Client\Runtime\Shared.dll&quot;" />
   </Target>
 
 </Project>

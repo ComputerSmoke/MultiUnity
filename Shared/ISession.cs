@@ -14,6 +14,5 @@ namespace Multiunity.Shared
         void Create(int prefab, Entity entity);
         void Update(Entity entity);
         void Destroy(int id);
-        public Socket GetSocket();
     }
 }

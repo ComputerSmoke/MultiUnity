@@ -7,7 +7,7 @@ public static class MultiSession
 {
     static Dictionary<GameObject, int> prefabCodes;
     static GameObject[] prefabs;
-    static ClientSession? session;
+    static ClientSession session;
     public static void Connect(int tcpPort) {
         session = new ClientSession(tcpPort, PeerHandler.Create, PeerHandler.Update, PeerHandler.Destroy);
     }

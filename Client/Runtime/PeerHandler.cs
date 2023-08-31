@@ -8,6 +8,7 @@ public static class PeerHandler
     static Dictionary<int, GameObject> peerObjects = new();
 
     public static int Create(int prefabId, Entity entity) {
+        Debug.Log("Creating");
         GameObject prefab = PrefabIdMap.PrefabById(prefabId);
         GameObject newObject = UnityEngine.Object.Instantiate(prefab);
         peerObjects[entity.clientId] = newObject;

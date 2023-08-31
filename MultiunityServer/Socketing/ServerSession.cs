@@ -24,14 +24,10 @@ namespace Multiunity.Server.Socketing
             this.socket = socket;
             creates = new Queue<Entity>();
             this.shard = new();
-            this.decoder = new (this);
+            this.decoder = new (socket, this);
             this.world = world;
         }
         //TODO: keep backlog of created objects in rooms and send to new clients joining
-        public Socket GetSocket()
-        {
-            return socket;
-        }
         public void Join(int roomId)
         {
             world.GetRoom(roomId).Join(this);

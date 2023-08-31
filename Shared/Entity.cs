@@ -7,20 +7,20 @@ using System.Threading.Tasks;
 
 namespace Multiunity.Shared
 {
-    using Vec = Tuple<float, float>;
     public class Entity
     {
-        public Vec pos;
-        public Vec vel;
-        public Vec accel;
+        public (float,float) pos;
+        public (float, float) vel;
+        public (float, float) accel;
         public float rot;
         public float rotv;
         public float rota;
         public int parent;
         public int id;
         public int clientId;
-        public ISession? owner;
-        public Entity(int clientId, Vec pos, Vec vel, Vec accel, float rot, float rotVel, float rotAccel, int parent)
+        public ISession owner;
+        public Entity(int clientId, (float, float) pos, (float, float) vel, (float, float) accel, 
+            float rot, float rotVel, float rotAccel, int parent)
         {
             this.pos = pos;
             this.vel = vel;
@@ -31,38 +31,5 @@ namespace Multiunity.Shared
             rotv = rotVel;
             rota = rotAccel;
         }
-
-        public byte[] Encoding()
-        {
-            byte[] data = new byte[40];
-            int i = 0;
-            i = AppendVec(data, i, pos);
-            i = AppendVec(data, i, vel);
-            i = AppendVec(data, i, accel);
-            i = AppendFloat(data, i, rot);
-            i = AppendFloat(data, i, rotv);
-            i = AppendFloat(data, i, rota);
-            AppendInt16(data, i, parent);
-            return data;
-        }
-        static int AppendVec(byte[] buf, int start, Vec v)
-        {
-            start = AppendFloat(buf, start, v.Item1);
-            start = AppendFloat(buf, start, v.Item2);
-            return start;
-        }
-        static int AppendFloat(byte[] buf, int start, float f)
-        {
-            byte[] bytes = BitConverter.GetBytes(f);
-            for (int i = 0; i < 4; i++) buf[start + i] = bytes[i];
-            return start + 4;
-        }
-        public static int AppendInt16(byte[] buf, int start, int n)
-        {
-            byte[] bytes = BitConverter.GetBytes(n);
-            for (int i = 0; i < 2; i++) buf[start + i] = bytes[i];
-            return start + 2;
-        }
-
     }
 }

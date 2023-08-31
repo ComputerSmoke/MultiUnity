@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
-using System.Text;
 using System.Threading.Tasks;
 using Multiunity.Server.Socketing;
 using Multiunity.Shared;
@@ -16,7 +15,7 @@ namespace Multiunity.Server.Sharding
         public Shard()
         {
             sessions = new HashSet<ServerSession>();
-            entities = new();
+            entities = new EntityDictionary();
         }
         public void AddSession(ServerSession session)
         {
@@ -36,36 +35,26 @@ namespace Multiunity.Server.Sharding
         public void Create(int prefab, Entity entity)
         {
             entities.Add(entity);
-            byte[] entityEncoding = entity.Encoding();
-            byte[] encoding = new byte[entityEncoding.Length+2];
-            int idx = 0;
-            idx = Entity.AppendInt16(encoding, idx, prefab);
-            for(int i = idx; i < encoding.Length; i++)
-            {
-                encoding[i] = entityEncoding[i-idx];
-            }
-            ForwardAll((ServerSession?)entity.owner, encoding);
+            ForwardAll((ServerSession?)entity.owner, Encoder.Create(prefab, entity));
         }
         public void Update(Entity entity)
         {
             entities.Add(entity);
-            byte[] encoding = entity.Encoding();
-            ForwardAll((ServerSession?)entity.owner, encoding);
+            ForwardAll((ServerSession?)entity.owner, Encoder.Update(entity));
         }
         public void Destroy(ServerSession owner, int clientId)
         {
             Entity entity = entities.Get(owner, clientId);
-            byte[] encoding = new byte[2];
-            Entity.AppendInt16(encoding, 0, entity.id);
             entities.Destroy(entity);
-            ForwardAll(owner, encoding);
+            //Note we forward w/ id, not client id. Make sure this translation is correctly defined and stuff.
+            ForwardAll(owner, Encoder.Destroy(entity.id));
         }
         private void ForwardAll(ServerSession? excluded, byte[] data)
         {
             foreach (ServerSession session in sessions)
             {
                 if (session == excluded) continue;
-                session.Send(data);
+                    session.Send(data);
             }
         }
     }

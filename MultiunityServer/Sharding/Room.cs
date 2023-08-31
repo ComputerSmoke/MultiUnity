@@ -26,7 +26,7 @@ namespace Multiunity.Server.Sharding
                 shard.AddSession(session);
                 return;
             }
-            Shard newShard = new();
+            Shard newShard = new Shard();
             newShard.AddSession(session);
             shards.Add(newShard);
         }

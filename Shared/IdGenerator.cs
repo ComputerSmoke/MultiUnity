@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Multiunity.Shared
 {
-    public class IdGenerator<T> where T: notnull
+    public class IdGenerator<T>
     {
         int nextId;
         Queue<int> ids;
@@ -18,18 +18,18 @@ namespace Multiunity.Shared
         {
             this.maxId = maxId;
             nextId = 1;
-            idMapping = new();
-            idMapRev = new();
-            ids = new();
+            idMapping = new Dictionary<T,int>();
+            idMapRev = new Dictionary<int,T>();
+            ids = new Queue<int>();
         }
         public IdGenerator()
         {
             //Default: 2 byte max int
             this.maxId = 0xFFFF;
             nextId = 1;
-            idMapping = new();
-            idMapRev = new();
-            ids = new();
+            idMapping = new Dictionary<T, int>();
+            idMapRev = new Dictionary<int, T>();
+            ids = new Queue<int>();
         }
         public int Assign(T obj)
         {
