@@ -1,4 +1,4 @@
-﻿using MultiunityServer;
+﻿using Multiunity.Server;
 
 Server server = new(11_000);
 

@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using System.Net;
 using System.Net.Sockets;
+using Multiunity.Shared;
 
 public static class Encoder
 {
@@ -13,7 +14,7 @@ public static class Encoder
         UPDATE,
         DESTROY
     }
-    private static IdGenerator<int> ObjectIdEncodings = new IdGenerator<int>();
+    private static Multiunity.Shared.IdGenerator<int> ObjectIdEncodings = new IdGenerator<int>();
     public static byte[] Create(GameObject obj, GameObject prefab) {
         List<byte> encoding = new List<byte>();
         encoding.Add((byte)NetCodes.CREATE);

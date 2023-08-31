@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MultiunityServer.Sharding
+namespace Multiunity.Server.Sharding
 {
     internal class World
     {

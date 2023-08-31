@@ -6,9 +6,9 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Collections.Specialized.BitVector32;
-using MultiunityServer.Sharding;
+using Multiunity.Server.Sharding;
 
-namespace MultiunityServer.Socketing
+namespace Multiunity.Server.Socketing
 {
     internal class SocketHandler
     {

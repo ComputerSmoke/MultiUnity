@@ -4,16 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MultiunityServer.Socketing;
 
-namespace MultiunityServer
+namespace Multiunity.Shared
 {
-    internal class EntityDictionary : ICollection<Entity> {
+    public class EntityDictionary : ICollection<Entity> {
         Dictionary<int, Entity> entities;
         Dictionary<int, Dictionary<int, Entity>> parentIndex;
         public int Count { get { return entities.Count; } } 
         public bool IsReadOnly { get { return false; } }
-        IdGenerator<(ServerSession, int)> entityIdGenerator;
+        IdGenerator<(ISession?, int)> entityIdGenerator;
         public EntityDictionary()
         {
             entities = new();
@@ -49,7 +48,7 @@ namespace MultiunityServer
             entityIdGenerator.Release(entity.id);
             Remove(entity);
         }
-        public void Destroy(ServerSession session, int clientId)
+        public void Destroy(ISession session, int clientId)
         {
             Destroy(entities[entityIdGenerator.GetId((session, clientId))]);
         }
@@ -57,7 +56,7 @@ namespace MultiunityServer
         {
             return entities[id];
         }
-        public Entity Get(ServerSession session, int clientId)
+        public Entity Get(ISession session, int clientId)
         {
             return Get(entityIdGenerator.GetId((session, clientId)));
         }

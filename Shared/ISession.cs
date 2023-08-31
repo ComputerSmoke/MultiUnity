@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Numerics;
 
-namespace MultiunityServer.Socketing
+namespace Multiunity.Shared
 {
-    internal interface ISession
+    public interface ISession
     {
         void Join(int room);
         void Create(int prefab, Entity entity);

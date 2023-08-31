@@ -6,15 +6,16 @@ using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Net;
 using System.Diagnostics;
-using MultiunityServer.Sharding;
+using Multiunity.Server.Sharding;
+using Multiunity.Shared;
 
-namespace MultiunityServer.Socketing
+namespace Multiunity.Server.Socketing
 {
     internal class ServerSession : ISession
     {
         public Socket socket;
         public Queue<Entity> creates;
-        Decoder decoder;
+        Shared.Decoder decoder;
         public Shard shard;
         private World world;
 
@@ -23,7 +24,7 @@ namespace MultiunityServer.Socketing
             this.socket = socket;
             creates = new Queue<Entity>();
             this.shard = new();
-            this.decoder = new Decoder(this);
+            this.decoder = new (this);
             this.world = world;
         }
         //TODO: keep backlog of created objects in rooms and send to new clients joining

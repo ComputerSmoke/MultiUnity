@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MultiunityServer
+namespace Multiunity.Shared
 {
-    internal class IdGenerator<T> where T: notnull
+    public class IdGenerator<T> where T: notnull
     {
         int nextId;
         Queue<int> ids;

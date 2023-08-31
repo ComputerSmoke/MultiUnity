@@ -1,9 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <TargetFramework>net5.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <BaseOutputPath>bin\</BaseOutputPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shared\Shared.csproj" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy &quot;.\bin\Debug\net6.0\ClientLib.dll&quot; &quot;..\Client\Runtime\ClientLib.dll&quot;&#xD;&#xA;copy &quot;.\bin\Debug\net6.0\Shared.dll&quot; &quot;..\Client\Runtime\Shared.dll&quot;" />
+  </Target>
 
 </Project>

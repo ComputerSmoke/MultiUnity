@@ -1,30 +1,27 @@
-﻿using MultiunityServer.Socketing;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MultiunityServer
+namespace Multiunity.Shared
 {
     using Vec = Tuple<float, float>;
-    internal class Entity
+    public class Entity
     {
-        Vec pos;
-        Vec vel;
-        Vec accel;
-        float rot;
-        float rotv;
-        float rota;
+        public Vec pos;
+        public Vec vel;
+        public Vec accel;
+        public float rot;
+        public float rotv;
+        public float rota;
         public int parent;
         public int id;
-        public float timestamp;
         public int clientId;
-        public ServerSession? owner;
+        public ISession? owner;
         public Entity(int clientId, Vec pos, Vec vel, Vec accel, float rot, float rotVel, float rotAccel, int parent)
         {
-            this.timestamp = timestamp;
             this.pos = pos;
             this.vel = vel;
             this.accel = accel;

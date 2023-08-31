@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MultiunityServer.Sharding;
-using MultiunityServer.Socketing;
+using Multiunity.Server.Sharding;
+using Multiunity.Server.Socketing;
 
-namespace MultiunityServer
+namespace Multiunity.Server
 {
     public class Server
     {

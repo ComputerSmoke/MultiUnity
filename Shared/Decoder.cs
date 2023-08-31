@@ -8,10 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 
-namespace MultiunityServer.Socketing
+namespace Multiunity.Shared
 {
     using Vec = Tuple<float, float>;
-    internal class Decoder
+    public class Decoder
     {
         enum InCode
         {

@@ -4,9 +4,10 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
-using MultiunityServer.Socketing;
+using Multiunity.Server.Socketing;
+using Multiunity.Shared;
 
-namespace MultiunityServer.Sharding
+namespace Multiunity.Server.Sharding
 {
     internal class Shard
     {
@@ -43,13 +44,13 @@ namespace MultiunityServer.Sharding
             {
                 encoding[i] = entityEncoding[i-idx];
             }
-            ForwardAll(entity.owner, encoding);
+            ForwardAll((ServerSession?)entity.owner, encoding);
         }
         public void Update(Entity entity)
         {
             entities.Add(entity);
             byte[] encoding = entity.Encoding();
-            ForwardAll(entity.owner, encoding);
+            ForwardAll((ServerSession?)entity.owner, encoding);
         }
         public void Destroy(ServerSession owner, int clientId)
         {
@@ -59,7 +60,7 @@ namespace MultiunityServer.Sharding
             entities.Destroy(entity);
             ForwardAll(owner, encoding);
         }
-        private void ForwardAll(ServerSession excluded, byte[] data)
+        private void ForwardAll(ServerSession? excluded, byte[] data)
         {
             foreach (ServerSession session in sessions)
             {
