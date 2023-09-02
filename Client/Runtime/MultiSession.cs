@@ -46,11 +46,16 @@ public static class MultiSession
         return obj;
     }
     private static void Create(GameObject obj, GameObject prefab) {
+        obj.AddComponent(typeof(Updater));
         int prefabId = Encoder.GetPrefabId(prefab);
         Entity entity = Encoder.Encode(obj);
         client.Create(prefabId, entity);
     }
     public static void Join(int roomId) {
         client.Join(roomId);
+    }
+    public static void Update(GameObject obj) {
+        Entity entity = Encoder.Encode(obj);
+        client.Update(entity);
     }
 }

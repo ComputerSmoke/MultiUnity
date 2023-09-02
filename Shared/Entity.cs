@@ -18,6 +18,8 @@ namespace Multiunity.Shared
         public int parent;
         public int id;
         public int clientId;
+        public float drag;
+        public float angularDrag;
         public ISession owner;
         public Entity(int clientId, (float, float) pos, (float, float) vel, (float, float) accel, 
             float rot, float rotVel, float rotAccel, int parent)
@@ -30,6 +32,36 @@ namespace Multiunity.Shared
             this.clientId = clientId;
             rotv = rotVel;
             rota = rotAccel;
+        }
+        public float PX()
+        {
+            (float px, float py) = pos;
+            return px;
+        }
+        public float PY()
+        {
+            (float px, float py) = pos;
+            return py;
+        }
+        public float VX()
+        {
+            (float x, float y) = vel;
+            return x;
+        }
+        public float VY()
+        {
+            (float x, float y) = vel;
+            return y;
+        }
+        public float AX()
+        {
+            (float x, float y) = accel;
+            return x;
+        }
+        public float AY()
+        {
+            (float x, float y) = accel;
+            return y;
         }
     }
 }
