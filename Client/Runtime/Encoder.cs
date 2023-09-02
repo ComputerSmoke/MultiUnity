@@ -8,93 +8,40 @@ using Multiunity.Shared;
 
 public static class Encoder
 {
-    public enum NetCodes {
-        JOIN_ROOM,
-        CREATE,
-        UPDATE,
-        DESTROY
-    }
     private static Multiunity.Shared.IdGenerator<int> ObjectIdEncodings = new IdGenerator<int>();
-    public static byte[] Create(GameObject obj, GameObject prefab) {
-        List<byte> encoding = new List<byte>();
-        encoding.Add((byte)NetCodes.CREATE);
-        AppendInt16(PrefabIdMap.IdByPrefab(prefab), encoding);
-        List<byte> updateEncoding = ObjectEncoding(obj);
-        encoding.AddRange(updateEncoding);
-        return encoding.ToArray();
-    }
-    private static void AppendInt16(int n, List<byte> buf) {
-        buf.Add((byte)(n >> 8));
-        buf.Add((byte)(n & 0xff));
-    }
-    private static void AppendFloat(float f, List<byte> buf) {
-        byte[] floatBytes = BitConverter.GetBytes(f);
-        for(int i = 0; i < 4; i++)
-            buf.Add((floatBytes[i]));
-    }
-    //default velocity, accel, rotational velocity, rotational accel
-    private static List<byte> NoBodyEncoding() {
-        List<byte> encoding = new List<byte>();
-        AppendFloat(0f, encoding);
-        AppendFloat(0f, encoding);
-        AppendFloat(0f, encoding);
-        AppendFloat(0f, encoding);
-        AppendFloat(0f, encoding);
-        AppendFloat(0f, encoding);
-        return encoding;
-    }
-    private static List<byte> BodyEncoding(Rigidbody2D body) {
-        List<byte> encoding = new List<byte>();
-        float vx = body.velocity.x;
-        float vy = body.velocity.y;
-        float vr = body.angularVelocity;
-        float ax = body.totalForce.x / body.mass;
-        float ay = body.totalForce.y / body.mass;
-        float ar = body.totalTorque / body.mass;
-        AppendFloat(vx, encoding);
-        AppendFloat(vy, encoding);
-        AppendFloat(ax, encoding);
-        AppendFloat(ay, encoding);
-        AppendFloat(vr, encoding);
-        AppendFloat(ar, encoding);
-        return encoding;
-    }
-    private static List<byte> ObjectEncoding(GameObject obj) {
+    public static Entity Encode(GameObject obj) {
         int id = ObjectIdEncodings.Assign(obj.GetInstanceID());
-        List<byte> encoding = new List<byte>();
-        AppendInt16(id, encoding);
-        AppendFloat(obj.transform.position.x, encoding);
-        AppendFloat(obj.transform.position.y, encoding);
         if(obj.TryGetComponent<Rigidbody2D>(out Rigidbody2D body)) 
-            encoding.AddRange(BodyEncoding(body));
-        else
-            encoding.AddRange(NoBodyEncoding());
-        AppendFloat((float)Math.Acos(Quaternion.Dot(obj.transform.rotation, Quaternion.identity)), encoding);
+            return EncodeBody(id, obj, body);
+        return EncodeNoBody(id, obj);
+    }
+    private static Entity EncodeBody(int id, GameObject obj, Rigidbody2D body) {
+        (float, float) pos = (obj.transform.position.x, obj.transform.position.y);
+        float rotation = (float)Math.Acos(Quaternion.Dot(obj.transform.rotation, Quaternion.identity));
+        (float, float) vel = (body.velocity.x, body.velocity.y);
+        (float, float) accel = (body.totalForce.x / body.mass, body.totalForce.y / body.mass);
+        float rotv = body.angularVelocity;
+        float rota = body.totalTorque / body.mass;
         Transform parent = obj.transform.parent;
-        if(parent == null)
-            AppendInt16(0, encoding);
-        else 
-            AppendInt16(ObjectIdEncodings.Assign(parent.GetInstanceID()), encoding);
-        return encoding;
+        int parentId = 0;
+        if(parent != null)
+            parentId = ObjectIdEncodings.Assign(parent.GetInstanceID());
+        return new Entity(id, pos, vel, accel, rota, rotv, rota, parentId);
     }
-    public static byte[] Update(GameObject obj) {
-        List<byte> encoding = new List<byte>();
-        encoding.Add((byte)NetCodes.UPDATE);
-        encoding.AddRange(ObjectEncoding(obj));
-        return encoding.ToArray();
+    private static Entity EncodeNoBody(int id, GameObject obj) {
+        (float, float) pos = (obj.transform.position.x, obj.transform.position.y);
+        float rotation = (float)Math.Acos(Quaternion.Dot(obj.transform.rotation, Quaternion.identity));
+        (float, float) vel = (0, 0);
+        (float, float) accel = (0, 0);
+        float rotv = 0;
+        float rota = 0;
+        Transform parent = obj.transform.parent;
+        int parentId = 0;
+        if(parent != null)
+            parentId = ObjectIdEncodings.Assign(parent.GetInstanceID());
+        return new Entity(id, pos, vel, accel, rota, rotv, rota, parentId);
     }
-    public static byte[] Join(int room) {
-        List<byte> encoding = new();
-        encoding.Add((byte)NetCodes.JOIN_ROOM);
-        AppendInt16(room, encoding);
-        return encoding.ToArray();
-    }
-    public static byte[] Destroy(GameObject obj) {
-        List<byte> encoding = new();
-        encoding.Add((byte)NetCodes.DESTROY);
-        int id = ObjectIdEncodings.GetId(obj.GetInstanceID());
-        AppendInt16(id, encoding);
-        ObjectIdEncodings.Release(id);
-        return encoding.ToArray();
+    public static int GetPrefabId(GameObject prefab) {
+        return PrefabIdMap.IdByPrefab(prefab);
     }
 }

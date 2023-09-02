@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using Multiunity.Shared;
 
-public static class PeerHandler
+public class ClientSession : ISession
 {
-    static Dictionary<int, GameObject> peerObjects = new();
+    Dictionary<int, GameObject> peerObjects;
+    public ClientSession() {
+        peerObjects = new();
+    }
 
-    public static int Create(int prefabId, Entity entity) {
+    public void Create(int prefabId, Entity entity) {
         Debug.Log("Creating");
         GameObject prefab = PrefabIdMap.PrefabById(prefabId);
         GameObject newObject = UnityEngine.Object.Instantiate(prefab);
         peerObjects[entity.clientId] = newObject;
         Update(entity);
-        return 0;
     }
-    public static int Update(Entity entity) {
+    public void Update(Entity entity) {
         GameObject obj = peerObjects[entity.clientId];
 
         obj.transform.position = new Vector3(entity.pos.Item1, entity.pos.Item2, 0);
@@ -31,13 +33,14 @@ public static class PeerHandler
             body.angularVelocity = entity.rotv;
             //TODO: make subcomponent for adding force, calculated based off body mass and target accel. Update its parameters here, make it in Create method
         }
-        return 0;
     }
-    public static int Destroy(int id) {
+    public void Destroy(int id) {
         GameObject obj = peerObjects[id];
         UnityEngine.Object.Destroy(obj);
         peerObjects.Remove(id);
         //TODO: remove children from mapping, perhaps use EntityDictionary. (make the shared classes actually shared and beat the duplicate code problem)
-        return 0;
+    }
+    public void Join(int roomId) {
+
     }
 }

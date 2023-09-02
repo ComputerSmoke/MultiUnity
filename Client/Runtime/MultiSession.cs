@@ -2,14 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Multiunity.Client;
+using Multiunity.Shared;
 
 public static class MultiSession
 {
     static Dictionary<GameObject, int> prefabCodes;
     static GameObject[] prefabs;
+    static Client client;
     static ClientSession session;
     public static void Connect(int tcpPort) {
-        session = new ClientSession(tcpPort, PeerHandler.Create, PeerHandler.Update, PeerHandler.Destroy);
+        session = new ClientSession();
+        client = new Client(tcpPort, session);
     }
     public static void SetPrefabIds(GameObject[] objects) {
         for(int i = 0; i < objects.Length; i++) {
@@ -43,11 +46,11 @@ public static class MultiSession
         return obj;
     }
     private static void Create(GameObject obj, GameObject prefab) {
-        byte[] buf = Encoder.Create(obj, prefab);
-        session.Send(buf);
+        int prefabId = Encoder.GetPrefabId(prefab);
+        Entity entity = Encoder.Encode(obj);
+        client.Create(prefabId, entity);
     }
     public static void Join(int roomId) {
-        byte[] encoding = Encoder.Join(roomId);
-        session.Send(encoding);
+        client.Join(roomId);
     }
 }
