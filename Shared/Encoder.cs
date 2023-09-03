@@ -13,11 +13,11 @@ namespace Multiunity.Shared
             AppendInt16(result, roomId);
             return result.ToArray();
         }
-        public static byte[] Create(int prefabId, Entity entity)
+        public static byte[] Create(Entity entity)
         {
             List<byte> result = new List<byte>();
             result.Add((byte)Decoder.InCode.CREATE);
-            AppendInt16(result, prefabId);
+            AppendInt16(result, entity.prefabId);
             result.AddRange(EncodeEntity(entity));
             return result.ToArray();
         }
@@ -68,7 +68,7 @@ namespace Multiunity.Shared
         {
             Entity dummy = new Entity(0, (0f, 0f), (0f, 0f), (0f, 0f), 0f, 0f, 0f, 0);
             int join = Join(0).Length;
-            int create = Create(0, dummy).Length;
+            int create = Create(dummy).Length;
             int update = Update(dummy).Length;
             int destroy = Destroy(0).Length;
             return new int[] { join, create, update, destroy };

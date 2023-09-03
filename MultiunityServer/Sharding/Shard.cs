@@ -21,7 +21,15 @@ namespace Multiunity.Server.Sharding
         {
             sessions.Add(session);
             session.shard = this;
+            ForwardCreateBacklog(session);
             Console.WriteLine("enqued new session");
+        }
+        private void ForwardCreateBacklog(ServerSession session)
+        {
+            foreach(Entity entity in entities)
+            {
+                session.Send(Encoder.Create(entity));
+            }
         }
         public void RemoveSession(ServerSession session)
         {
@@ -32,10 +40,10 @@ namespace Multiunity.Server.Sharding
         {
             return sessions.Count;
         }
-        public void Create(int prefab, Entity entity)
+        public void Create(Entity entity)
         {
             entities.Add(entity);
-            ForwardAll((ServerSession?)entity.owner, Encoder.Create(prefab, entity));
+            ForwardAll((ServerSession?)entity.owner, Encoder.Create(entity));
         }
         public void Update(Entity entity)
         {
@@ -45,6 +53,7 @@ namespace Multiunity.Server.Sharding
         public void Destroy(ServerSession owner, int clientId)
         {
             Entity entity = entities.Get(owner, clientId);
+            //TODO: also destroy children?
             entities.Destroy(entity);
             //Note we forward w/ id, not client id. Make sure this translation is correctly defined and stuff.
             ForwardAll(owner, Encoder.Destroy(entity.id));

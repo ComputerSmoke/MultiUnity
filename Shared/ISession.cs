@@ -11,7 +11,7 @@ namespace Multiunity.Shared
     public interface ISession
     {
         void Join(int room);
-        void Create(int prefab, Entity entity);
+        void Create(Entity entity);
         void Update(Entity entity);
         void Destroy(int id);
     }

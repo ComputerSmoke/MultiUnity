@@ -30,7 +30,8 @@ namespace Multiunity.Client
         }
         public void Create(int prefabId, Entity entity)
         {
-            Send(Shared.Encoder.Create(prefabId, entity));
+            entity.prefabId = prefabId;
+            Send(Shared.Encoder.Create(entity));
         }
         public void Update(Entity entity)
         {

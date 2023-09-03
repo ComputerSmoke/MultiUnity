@@ -20,6 +20,9 @@ namespace Multiunity.Shared
         public int clientId;
         public float drag;
         public float angularDrag;
+        //TODO: find a way to refactor this data class... perhaps with event pattern?
+        //Probably goes hand-in-hand with making the server multithreaded
+        public int prefabId;
         public ISession owner;
         public Entity(int clientId, (float, float) pos, (float, float) vel, (float, float) accel, 
             float rot, float rotVel, float rotAccel, int parent)

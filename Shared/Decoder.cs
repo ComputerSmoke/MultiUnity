@@ -45,7 +45,8 @@ namespace Multiunity.Shared
         {
             int prefab = ReadInt16();
             Entity entity = ReadEntity();
-            session.Create(prefab, entity);
+            entity.prefabId = prefab;
+            session.Create(entity);
             return 0;
         }
         private int Update()

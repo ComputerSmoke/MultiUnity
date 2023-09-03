@@ -58,4 +58,9 @@ public static class MultiSession
         Entity entity = Encoder.Encode(obj);
         client.Update(entity);
     }
+    public static void Destroy(GameObject obj) {
+        Entity entity = Encoder.Encode(obj);
+        client.Destroy(entity.clientId);
+        Object.Destroy(obj);
+    }
 }

@@ -10,7 +10,7 @@ namespace ClientTest
     internal class ClientSession : ISession
     {
         public ClientSession() { }
-        public void Create(int prefabId, Entity entity)
+        public void Create(Entity entity)
         {
             Console.WriteLine("Create");
         }

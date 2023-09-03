@@ -32,10 +32,10 @@ namespace Multiunity.Server.Socketing
         {
             world.GetRoom(roomId).Join(this);
         }
-        public void Create(int prefab, Entity entity)
+        public void Create(Entity entity)
         {
             entity.owner = this;
-            shard.Create(prefab, entity);
+            shard.Create(entity);
         }
         public void Update(Entity entity)
         {

@@ -10,9 +10,9 @@ public class ClientSession : ISession
         peerObjects = new();
     }
 
-    public void Create(int prefabId, Entity entity) {
+    public void Create(Entity entity) {
         Debug.Log("Creating");
-        GameObject prefab = PrefabIdMap.PrefabById(prefabId);
+        GameObject prefab = PrefabIdMap.PrefabById(entity.prefabId);
         GameObject newObject = UnityEngine.Object.Instantiate(prefab);
         peerObjects[entity.clientId] = newObject;
         Update(entity);
