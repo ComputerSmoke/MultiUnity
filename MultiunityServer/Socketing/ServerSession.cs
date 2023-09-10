@@ -46,7 +46,10 @@ namespace Multiunity.Server.Socketing
         {
             shard.Destroy(this, clientId);
         }
-
+        public void Signal(int id, byte[] msg)
+        {
+            shard.Signal(this, id, msg);
+        }
         public void Send(byte[] data)
         {
             try

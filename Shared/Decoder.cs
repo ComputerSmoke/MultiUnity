@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Multiunity.Shared
 {
@@ -16,14 +17,14 @@ namespace Multiunity.Shared
             JOIN_ROOM,
             CREATE,
             UPDATE,
-            DESTROY
+            DESTROY,
+            SIGNAL
         }
         InCode? reading;
         Queue<byte> inQueue;
         byte[] inBuf;
         ISession session;
         Func<int>[] codeFunctions;
-        int[] codeLengths;
         Socket socket;
         public Decoder(Socket socket, ISession session)
         {
@@ -31,8 +32,7 @@ namespace Multiunity.Shared
             this.session = session;
             inQueue = new Queue<byte>();
             inBuf = new byte[1000];
-            codeFunctions = new Func<int>[] { Join, Create, Update, Destroy };
-            codeLengths = Encoder.CodeLengths();
+            codeFunctions = new Func<int>[] { Join, Create, Update, Destroy, Signal};
             Listen();
         }
         private int Join()
@@ -59,6 +59,14 @@ namespace Multiunity.Shared
         {
             int id = ReadInt16();
             session.Destroy(id);
+            return 0;
+        }
+        private int Signal()
+        {
+            int id = ReadInt16();
+            int length = ReadInt16();
+            byte[] msg = ReadBytes(length);
+            session.Signal(id, msg);
             return 0;
         }
         private Entity ReadEntity()
@@ -92,7 +100,13 @@ namespace Multiunity.Shared
         private byte[] ReadBytes(int n)
         {
             byte[] bytes = new byte[n];
-            for (int i = 0; i < n; i++) bytes[i] = inQueue.Dequeue();
+            for (int i = 0; i < n; i++)
+            {
+                if (inQueue.Count == 0)
+                    //TODO: make not a spin lock
+                    Thread.Sleep(10);
+                bytes[i] = inQueue.Dequeue();
+            }
             return bytes;
         }
         private void ReadQueue()
@@ -101,11 +115,14 @@ namespace Multiunity.Shared
             if (reading == null)
             {
                 int readNum = inQueue.Dequeue();
-                if (readNum < 0 || readNum >= codeLengths.Length) return;
+                if (readNum < 0 || readNum >= codeFunctions.Length)
+                {
+                    Console.WriteLine("Recieved invalid code: " + readNum);
+                    return;
+                }
                 if (reading == null) reading = (InCode)readNum;
             }
             Console.WriteLine("reading: " + reading);
-            if (inQueue.Count < codeLengths[(int)reading]-1) return;
             codeFunctions[(int)reading]();
             reading = null;
             ReadQueue();

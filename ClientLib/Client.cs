@@ -45,6 +45,10 @@ namespace Multiunity.Client
         {
             Send(Shared.Encoder.Destroy(id));
         }
+        public void Signal(int id, byte[] msg)
+        {
+            Send(Shared.Encoder.Signal(id, msg));
+        }
         private void Send(byte[] data)
         {
             socket.Send(data);

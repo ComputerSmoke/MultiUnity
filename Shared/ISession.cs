@@ -14,5 +14,6 @@ namespace Multiunity.Shared
         void Create(Entity entity);
         void Update(Entity entity);
         void Destroy(int id);
+        void Signal(int id, byte[] msg);
     }
 }

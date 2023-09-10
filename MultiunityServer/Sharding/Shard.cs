@@ -58,6 +58,10 @@ namespace Multiunity.Server.Sharding
             //Note we forward w/ id, not client id. Make sure this translation is correctly defined and stuff.
             ForwardAll(owner, Encoder.Destroy(entity.id));
         }
+        public void Signal(ServerSession owner, int id, byte[] msg)
+        {
+            ForwardAll(owner, Encoder.Signal(id, msg));
+        }
         private void ForwardAll(ServerSession? excluded, byte[] data)
         {
             foreach (ServerSession session in sessions)

@@ -26,5 +26,9 @@ namespace ClientTest
         {
             Console.WriteLine("Join");
         }
+        public void Signal(int prefabId, byte[] msg)
+        {
+            Console.WriteLine("Signal");
+        }
     }
 }

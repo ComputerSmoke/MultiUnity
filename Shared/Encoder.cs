@@ -35,6 +35,16 @@ namespace Multiunity.Shared
             AppendInt16(result, id);
             return result.ToArray();
         }
+        public static byte[] Signal(int prefabId, byte[] msg)
+        {
+            List<byte> data = new List<byte>();
+            data.Add((byte)Decoder.InCode.SIGNAL);
+            AppendInt16(data, prefabId);
+            AppendInt16(data, msg.Length);
+            foreach(byte b in msg)
+                data.Add(b);
+            return data.ToArray();
+        }
         public static List<byte> EncodeEntity(Entity entity)
         {
             List<byte> data = new List<byte>();
