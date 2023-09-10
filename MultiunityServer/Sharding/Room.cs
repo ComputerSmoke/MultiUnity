@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Shared.Records;
 
 namespace Multiunity.Server.Sharding
 {
@@ -18,6 +19,12 @@ namespace Multiunity.Server.Sharding
             this.id = id;
             shards = new List<Shard>();
         }
+        public Room(RoomSpec spec)
+        {
+            id = spec.id;
+            shardSize = spec.shardSize;
+            shards = new();
+        }
         public void Join(ServerSession session)
         {
             foreach(Shard shard in shards)
@@ -29,6 +36,10 @@ namespace Multiunity.Server.Sharding
             Shard newShard = new Shard();
             newShard.AddSession(session);
             shards.Add(newShard);
+        }
+        public RoomSpec Spec()
+        {
+            return new RoomSpec(id, shardSize);
         }
     }
 }

@@ -77,7 +77,7 @@ PlayerSettings:
   androidFullscreenMode: 1
   defaultIsNativeResolution: 1
   macRetinaSupport: 1
-  runInBackground: 0
+  runInBackground: 1
   captureSingleScreen: 0
   muteOtherAudioSources: 0
   Prepare IOS For Recording: 0
@@ -814,8 +814,8 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: Multiunity_example
-  metroPackageVersion: 
+  metroPackageName: Multiunityexample
+  metroPackageVersion: 1.0.0.0
   metroCertificatePath: Assets/WSATestCertificate.pfx
   metroCertificatePassword: 
   metroCertificateSubject: DefaultCompany
@@ -823,7 +823,7 @@ PlayerSettings:
   metroCertificateNotAfter: 8091acc346fbda01
   metroApplicationDescription: Multiunity_example
   wsaImages: {}
-  metroTileShortName: 
+  metroTileShortName: Multiunity_example
   metroTileShowName: 0
   metroMediumTileShowName: 0
   metroLargeTileShowName: 0
