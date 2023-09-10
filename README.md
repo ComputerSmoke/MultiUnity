@@ -1,5 +1,5 @@
 # MultiUnity
-A library for creating multiplayer unity games. Multiunity abstracts away the networking difficulties of creating multiplayer games,
+A library for creating 2D multiplayer unity games. Multiunity abstracts away the networking difficulties of creating multiplayer games,
  making the process nearly as simple as creating singleplayer games.
 
 This project is in its very early stages, and I wouldn't recommend building unity apps with it yet unless you are prepared to fix the problems which will arise. The project contains bugs, is not optimized, and is missing features. Hopefully I'll get around to improving the documentation eventually.
