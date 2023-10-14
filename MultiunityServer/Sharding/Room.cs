@@ -10,19 +10,22 @@ namespace Multiunity.Server.Sharding
 {
     internal class Room
     {
+        public bool multiShard;
         public int id;
         int shardSize;
         List<Shard> shards;
-        public Room(int id, int shardSize)
+        public Room(int id, int shardSize, bool multiShard)
         {
             this.shardSize = shardSize;
             this.id = id;
+            this.multiShard = multiShard;
             shards = new List<Shard>();
         }
         public Room(RoomSpec spec)
         {
             id = spec.id;
             shardSize = spec.shardSize;
+            multiShard = spec.multiShard;
             shards = new();
         }
         public void Join(ServerSession session)
@@ -33,13 +36,15 @@ namespace Multiunity.Server.Sharding
                 shard.AddSession(session);
                 return;
             }
+            if (!multiShard && shards.Count > 0) return;
             Shard newShard = new Shard();
             newShard.AddSession(session);
             shards.Add(newShard);
+
         }
         public RoomSpec Spec()
         {
-            return new RoomSpec(id, shardSize);
+            return new RoomSpec(id, shardSize, multiShard);
         }
     }
 }

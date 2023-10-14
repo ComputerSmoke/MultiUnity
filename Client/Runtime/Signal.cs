@@ -12,9 +12,20 @@ namespace Multiunity.Unity {
         public abstract byte[] Message();
         public abstract void Execute();
         protected void Forward() {
-            if(external)
+            if(external || !MultiSession.connected)
                 return;
             MultiSession.Signal(this);
+        }
+        //To use half the byte for negative numbers
+        protected static byte Shrink(int x) {
+            if(x >= 0) 
+                return (byte)x;
+            return (byte)(255+x);
+        }
+        protected static int Grow(byte x) {
+            if(x < 128) 
+                return (int)x;
+            return (int)x-255;
         }
     }
 }

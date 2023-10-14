@@ -10,18 +10,25 @@ namespace Multiunity.Server.Sharding
     {
         Dictionary<int, Room> rooms;
         public string name;
-        public World()
+        private bool multiShard;
+        private int shardSize;
+        public World(int shardSize, bool multiShard)
         {
             rooms = new Dictionary<int, Room>();
             name = "default";
+            this.multiShard = multiShard;
+            this.shardSize = shardSize;
         }
-        public World(string name)
+        public World(string name, int shardSize, bool multiShard)
         {
             rooms = new();
             this.name = name;
+            this.multiShard = multiShard;
+            this.shardSize = shardSize;
         }
-        public void AddRoom(Room room)
+        public void CreateRoom(int id)
         {
+            Room room = new(id, shardSize, multiShard);
             rooms[room.id] = room;
         }
         public void RemoveRoom(Room room)

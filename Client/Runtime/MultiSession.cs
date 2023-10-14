@@ -12,9 +12,11 @@ namespace Multiunity.Unity {
         static GameObject[] prefabs;
         static Client.Client client;
         static ClientSession session;
+        static public bool connected;
         public static void Connect(int tcpPort) {
             session = new ClientSession();
             client = new Client.Client(tcpPort, session);
+            connected = true;
         }
         public static void SetPrefabIds(GameObject[] objects) {
             for(int i = 0; i < objects.Length; i++) {

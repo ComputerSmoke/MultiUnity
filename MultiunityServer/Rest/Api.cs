@@ -37,11 +37,13 @@ namespace MultiunityServer.Rest
 
             app.MapPost($"/world.name/rooms", CreateRoom);
 
+
+
             app.Run();
         }
-        private bool CreateRoom(RoomSpec spec) {
-            if (world.HasRoom(spec.id)) return false;
-            world.AddRoom(new Room(spec));
+        private bool CreateRoom(int id) {
+            if (world.HasRoom(id)) return false;
+            world.CreateRoom(id);
             return true;
         }
     }

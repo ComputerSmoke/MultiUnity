@@ -13,22 +13,21 @@ namespace Multiunity.Server
         SocketHandler handler;
         World world;
         Random rnd;
-        public Server(int portnum)
+        public Server(int portnum, int shardSize, bool multiShard)
         {
             rnd = new();
-            world = new();
+            world = new(shardSize, multiShard);
             handler = new(portnum, world);
         }
-        public int CreateRoom(int shardSize, int id)
+        public int CreateRoom(int id)
         {
-            Room room = new(id, shardSize);
-            world.AddRoom(room);
+            world.CreateRoom(id);
             return id;
         }
-        public int CreateRoom(int shardSize)
+        public int CreateRoom()
         {
             int id = rnd.Next();
-            return CreateRoom(shardSize, id);
+            return CreateRoom(id);
         }
     }
 }

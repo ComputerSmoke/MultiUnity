@@ -8,10 +8,12 @@ namespace Shared.Records
     {
         public int id { get; set; }
         public int shardSize { get; set; }
-        public RoomSpec(int id, int shardSize)
+        public bool multiShard { get; set; }
+        public RoomSpec(int id, int shardSize, bool multiShard)
         {
             this.id = id;
             this.shardSize = shardSize;
+            this.multiShard = multiShard;
         }
     }
 }
